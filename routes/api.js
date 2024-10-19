@@ -32,8 +32,8 @@ module.exports = function (app) {
 
   app.route("/api/check").post((req, res) => {
     const { puzzle, coordinate, value } = req.body;
-    if (!puzzle) {
-      return res.status(400).json({ error: "Required field missing" });
+    if (!puzzle || !coordinate || !value) {
+      return res.status(400).json({ error: "Required field(s) missing" });
     }
     if (!detectUndeChars(puzzle)) {
       return res.status(400).json({ error: "Invalid characters in puzzle" });
@@ -42,9 +42,6 @@ module.exports = function (app) {
       return res
         .status(400)
         .json({ error: "Expected puzzle to be 81 characters long" });
-    }
-    if (!coordinate) {
-      return res.status(400).json({ error: "Invalid coordinate" });
     }
     const [row, column] = coordinate.split("");
     if (
